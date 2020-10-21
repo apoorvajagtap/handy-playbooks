@@ -1,0 +1,40 @@
+---
+- name: Merged operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Remove interface config
+      junipernetworks.junos.junos_config:
+        lines:
+          - delete interfaces ge-0/0/1
+          - delete interfaces ge-0/0/2
+          - delete interfaces ge-0/0/3
+          - delete interfaces ge-0/0/4
+          - delete interfaces ae1
+          - delete interfaces ae2
+    - name: Configure base lag interface
+      junipernetworks.junos.junos_config:
+        lines:
+          - set interfaces ae1 description "Configured by Ansible"
+          - set interfaces ae2 description "Configured by Ansible"
+
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      junipernetworks.junos.junos_lag_interfaces: &id001
+        config:
+          - name: ae1
+            members:
+              - member: ge-0/0/1
+              - member: ge-0/0/2
+            mode: active
+
+          - name: ae2
+            link_protection: true
+            members:
+              - member: ge-0/0/3
+                link_type: primary
+              - member: ge-0/0/4
+                link_type: backup
+            mode: passive
+        state: merged

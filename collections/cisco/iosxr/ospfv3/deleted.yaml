@@ -1,0 +1,15 @@
+- hosts: iosxr-lab
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks: 
+    - name: Delete provided configuration
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 10
+            - process_id: 26
+            - process_id: 27
+            - process_id: 30
+        state: deleted

@@ -1,0 +1,13 @@
+---
+- name: Merged operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Merged provided config with running-config
+      junipernetworks.junos.junos_interfaces: &id001
+        config:
+          - name: ge-0/0/0
+            description: Configured by Ansible-Team
+
+        state: merged

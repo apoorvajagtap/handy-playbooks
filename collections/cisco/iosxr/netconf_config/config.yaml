@@ -1,0 +1,74 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-lab
+  gather_facts: no
+  collections:
+    - cisco.iosxr
+  tasks:
+#    - name: Enable Netconf service
+#      connection: ansible.netcommon.network_cli
+#      tags: netconf
+#      cisco.iosxr.iosxr_netconf:
+#        netconf_port: 830
+#        netconf_vrf: default
+#        state: present
+    - name: set ntp server in the device
+      ansible.netcommon.netconf_config:
+        content: |
+          <nc:config
+              xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0"
+              xmlns:oc-if="http://openconfig.net/yang/interfaces"
+              xmlns:if="urn:ietf:params:xml:ns:yang:ietf-interfaces"
+              xmlns:md="urn:ietf:params:xml:ns:yang:ietf-yang-metadata"
+              xmlns:nc-op="https://github.com/ansible-network/yang/nc-op"
+              xmlns:oc-ext="http://openconfig.net/yang/openconfig-ext"
+              xmlns:oc-types="http://openconfig.net/yang/openconfig-types"
+              xmlns:oc-yang="http://openconfig.net/yang/types/yang"
+              xmlns:yang="urn:ietf:params:xml:ns:yang:ietf-yang-types">
+              <oc-if:interfaces>
+                  <oc-if:interface>
+                      <oc-if:name>GigabitEthernet0/0/0/2</oc-if:name>
+                      <oc-if:config>
+                          <oc-if:description>Configured with yang collection</oc-if:description>
+                          <oc-if:name>GigabitEthernet0/0/0/2</oc-if:name>
+                      </oc-if:config>
+                  </oc-if:interface>
+              </oc-if:interfaces>
+          </nc:config>
+#              <config>
+#                  <cdp
+#                      xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cdp-cfg">
+#                      <timer>80</timer>
+#                      <enable>true</enable>
+#                      <log-adjacency></log-adjacency>
+#                      <hold-time>100
+#                      </hold-time>
+#                      <advertise-v1-only></advertise-v1-only>
+#                  </cdp>
+#              </config>
+
+
+#          <config
+#          xmlns:xc="urn:ietf:params:xml:n:netconf:base:1.0">
+#          <cdp
+#              xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cdp-cfg">
+#              <timer>80</timer>
+#              <enable>true</enable>
+#              <log-adjacency></log-adjacency>
+#              <hold-time>100
+#              </hold-time>
+#              <advertise-v1-only></advertise-v1-only>
+#          </cdp>
+#          </config>
+
+#  <config>
+#  <cdp
+#  xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cdp-cfg">
+#  <timer>80</timer>
+#  <enable>true</enable>
+#  <log-adjacency></log-adjacency>
+#  <hold-time>100
+#  </hold-time>
+#  <advertise-v1-only></advertise-v1-only>
+#  </cdp>
+#  </config>

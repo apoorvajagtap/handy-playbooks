@@ -1,0 +1,10 @@
+---
+- name: Parsed Playbook For Junos LLDP GLOBAL
+  hosts: junos-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Parsed the runing-config
+      junipernetworks.junos.junos_lldp_global:
+        running_config: "{{lookup('file', './netconf_data/parsed.cfg')}}"
+        state: parsed

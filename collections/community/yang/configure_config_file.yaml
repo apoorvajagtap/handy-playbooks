@@ -1,0 +1,16 @@
+---
+- name: Configure IOS-XR interfaces with JSON Config File input
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+  vars:
+    yang_file: "./files/cisco/iosxr/*.yang"
+    search_path: "./files/cisco/iosxr"
+    config_file: "./config_store/iosxr/613/openconfig-interfaces.json"
+  tasks:
+    - name: Configure interface description
+      community.yang.configure:
+        config: "{{ lookup('file', config_file) }}"
+        file: "{{ yang_file }}"
+        search_path: "{{ search_path }}"
+      register: result

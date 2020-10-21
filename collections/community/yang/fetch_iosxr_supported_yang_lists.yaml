@@ -1,0 +1,16 @@
+---
+- name: Fetch Yang Schema Playbook
+  gather_facts: no
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+    - cisco.iosxr
+  tasks:
+    - name: Fetch given yang model and it’s dependent models from remote host
+      community.yang.fetch:
+      register: yang_list
+
+    - name: Print
+      debug:
+        var: yang_list
+

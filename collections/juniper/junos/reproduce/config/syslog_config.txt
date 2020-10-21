@@ -1,0 +1,4 @@
+set system syslog host 10.1.1.12 any error
+set system syslog file qflogs
+set system syslog file qflogs structured-data brief
+set system syslog file qflogs archive size 1g

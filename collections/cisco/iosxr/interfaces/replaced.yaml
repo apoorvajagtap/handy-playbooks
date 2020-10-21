@@ -1,0 +1,32 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-rdo
+  gather_facts: no
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Populate Config
+      vars:
+        lines: "interface GigabitEthernet 0/0/0/0\ndescription this is interface0\n\
+          mtu 65\nspeed 10\nno shutdown\ninterface GigabitEthernet 0/0/0/1\ndescription\
+          \ this is interface1\nmtu 65\nspeed 10\nno shutdown\n"
+      ansible.netcommon.cli_config
+        config: '{{ lines }}'
+#    - name: Merge the provided interfaces config to running-config
+#      iosxr_interfaces:
+#        config:
+#
+#          - name: GigabitEthernet0/0/0/0
+#            description: Configured and Replaced by Ansible-Network
+#            mtu: 110
+#
+#          - name: GigabitEthernet0/0/0/1
+#            description: Configured and Replaced by Ansible-Network
+#            speed: 100
+#        state: replaced
+#    - name: Remove Config
+#      vars:
+#        lines: "interface loopback888\nno description\nno shutdown\ninterface loopback999\n\
+#          no description\nno shutdown\n"
+#      ansible.netcommon.cli_config:
+#        config: '{{ lines }}'

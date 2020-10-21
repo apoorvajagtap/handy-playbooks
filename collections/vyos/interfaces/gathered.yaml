@@ -1,0 +1,8 @@
+- hosts: vyos
+  gather_facts: false
+  collections:
+    - vyos.vyos
+  tasks:
+   - name: Gather the interfaces from running config
+     vyos_l3_interfaces: &id001
+       state: gathered

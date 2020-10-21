@@ -1,0 +1,23 @@
+---
+- name: convert configured interfaces to structured data
+  hosts: iosxr-local
+  vars:
+    inventory_dir: "lab_inventory"
+    inventory_hostname: "iosxr-local"
+  gather_facts: false
+  tasks:
+
+  - name: Use the INTERFACES resource module to gather the current config
+    cisco.iosxr.iosxr_interfaces:
+      state: gathered
+    register: interfaces
+
+  - name: Create inventory directory
+    file:
+      path: "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}"
+      state: directory
+
+  - name: Write the INTERFACES configuration to a file
+    copy:
+      content: "{{ {'interfaces': interfaces['gathered']} | to_nice_yaml }}"
+      dest: "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}/interfaces.yaml"

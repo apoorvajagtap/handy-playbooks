@@ -1,0 +1,32 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Populate Config
+      vars:
+        lines: "interface GigabitEthernet 0/0/0/1\ndot1q native vlan 10\nl2transport\
+          \ l2protocol cdp forward\nl2transport propagate remote-status\ninterface GigabitEthernet\
+          \ 0/0/0/4\ndot1q native vlan 20\nl2transport l2protocol vtp tunnel\ninterface\
+          \ GigabitEthernet 0/0/0/3.900\ndot1q vlan 40 60\n"
+      ansible.netcommon.cli_config:
+        config: '{{ lines }}'
+    - name: Override device L2 configuration of all interfaces with provided configuration
+      register: result
+      cisco.iosxr.iosxr_l2_interfaces: &id001
+        config:
+
+          - name: GigabitEthernet0/0/0/4
+            native_vlan: 40
+            l2transport: true
+            l2protocol:
+
+              - stp: forward
+
+          - name: GigabitEthernet0/0/0/3.900
+            q_vlan:
+              - 20
+              - 40
+        state: overridden
+

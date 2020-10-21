@@ -1,0 +1,161 @@
+from lxml import etree
+data1 = """
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc-reply message-id="urn:uuid:0cadb4e8-5bba-47f4-986e-72906227007f">
+    <configuration changed-seconds="1590139550" changed-localtime="2020-05-22 09:25:50 UTC">
+        <interfaces>
+            <interface>
+                <name>ge-0/0/1</name>
+                <description>Configured by Ansible</description>
+                <disable/>
+                <speed>100m</speed>
+                <mtu>1024</mtu>
+                <hold-time>
+                    <up>2000</up>
+                    <down>2200</down>
+                </hold-time>
+                <link-mode>full-duplex</link-mode>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <ethernet-switching>
+                            <interface-mode>access</interface-mode>
+                            <vlan>
+                                <members>vlan100</members>
+                            </vlan>
+                        </ethernet-switching>
+                    </family>
+                </unit>
+            </interface>
+            <interface>
+                <name>ge-0/0/2</name>
+                <description>Configured by Ansible</description>
+                <native-vlan-id>400</native-vlan-id>
+                <speed>10m</speed>
+                <mtu>2048</mtu>
+                <hold-time>
+                    <up>3000</up>
+                    <down>3200</down>
+                </hold-time>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <ethernet-switching>
+                            <interface-mode>trunk</interface-mode>
+                            <vlan>
+                                <members>vlan200</members>
+                                <members>vlan300</members>
+                            </vlan>
+                        </ethernet-switching>
+                    </family>
+                </unit>
+            </interface>
+            <interface>
+                <name>ge-1/0/0</name>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <inet>
+                            <address>
+                                <name>192.168.100.1/24</name>
+                            </address>
+                            <address>
+                                <name>10.200.16.20/24</name>
+                            </address>
+                        </inet>
+                        <inet6></inet6>
+                    </family>
+                </unit>
+            </interface>
+            <interface>
+                <name>ge-2/0/0</name>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <inet>
+                            <address>
+                                <name>192.168.100.2/24</name>
+                            </address>
+                            <address>
+                                <name>10.200.16.21/24</name>
+                            </address>
+                        </inet>
+                        <inet6></inet6>
+                    </family>
+                </unit>
+            </interface>
+            <interface>
+                <name>ge-3/0/0</name>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <inet>
+                            <address>
+                                <name>192.168.100.3/24</name>
+                            </address>
+                            <address>
+                                <name>10.200.16.22/24</name>
+                            </address>
+                        </inet>
+                        <inet6></inet6>
+                    </family>
+                </unit>
+            </interface>
+            <interface>
+                <name>em1</name>
+                <description>TEST</description>
+            </interface>
+            <interface>
+                <name>fxp0</name>
+                <description>ANSIBLE</description>
+                <speed>1g</speed>
+                <link-mode>automatic</link-mode>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <inet>
+                            <address>
+                                <name>10.8.38.38/24</name>
+                            </address>
+                        </inet>
+                    </family>
+                </unit>
+            </interface>
+        </interfaces>
+    </configuration>
+</rpc-reply>
+"""
+data1 = """
+<rpc-reply
+    xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+    xmlns:junos="http://xml.juniper.net/junos/18.4R1/junos">
+    <configuration
+        xmlns="http://xml.juniper.net/xnm/1.1/xnm" junos:commit-seconds="1594056391" junos:commit-localtime="2020-07-06 17:26:31 UTC" junos:commit-user="rohit">
+        <interfaces>
+            <interface>
+                <name>gr-0/0/0</name>
+                <description>test gre interface</description>
+            </interface>
+            <interface>
+                <name>fxp0</name>
+                <unit>
+                    <name>0</name>
+                    <family>
+                        <inet>
+                            <dhcp></dhcp>
+                        </inet>
+                    </family>
+                </unit>
+            </interface>
+        </interfaces>
+    </configuration>
+</rpc-reply>
+"""
+
+if isinstance(data1, str):
+    data1 = etree.fromstring(
+        bytes(data1, 'utf-8')
+    )
+    print(data1)
+resources = data1.xpath("configuration/interfaces/interface")
+print(resources)

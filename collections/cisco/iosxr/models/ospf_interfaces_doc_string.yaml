@@ -1,0 +1,460 @@
+module: iosxr_ospf_interfaces
+version_added: 1.2.0
+short_description: OSPF Interfaces Resource Module.
+description:
+  - This module manages OSPF(v2/v3) configuration of interfaces on devices running Cisco IOS-XR.
+author: Rohit Thakur (@rohitthakur2590)
+options:
+  config:
+    description: A list of OSPF configuration for interfaces.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+          - Name/Identifier of the interface.
+        type: str
+        required: True
+      address_family:
+        description:
+          - OSPF settings on the interfaces in address-family context.
+        type: list
+        elements: dict
+        suboptions:
+          afi:
+            description:
+              - Address Family Identifier (AFI) for OSPF settings on the interfaces.
+            type: str
+            choices: ['ipv4', 'ipv6']
+            required: True
+          process:
+            description:
+              - Interfaces configuration for an OSPF process.
+            type: list
+            elements: dict
+            suboptions:
+              process_id:
+                description:
+                  - OSPF process tag.
+                type: str
+                required: True
+              area:
+                description:
+                  - Area associated with interface.
+                type: dict
+                suboptions:
+                  area_id:
+                    description:
+                      - Area ID as a decimal or IP address format.
+                    type: str
+                    required: True
+                  secondaries:
+                    description:
+                      - Do not include secondary IPv4/IPv6 addresses.
+                    type: bool
+              multi_areas:
+                description:
+                  - Multi-Areas associated with interface.
+                  - Valid values are Area Ids as an integer or IP address
+                type: list
+                elements: str
+              apply_group_option:
+                description: Specify configuration from a group
+                type: dict
+                suboptions:
+                  group_name:
+                    description: Specify the name of the group
+                    type: str
+                  operation:
+                    descrtiption: Specify the group config operation
+                    type: str
+                    choices: [add, remove, append]
+              authentication:
+                description: Enable authentication
+                type: dict
+                suboptions:
+                  message_digest:
+                    description: Use message-digest authentication
+                    type: dict
+                    suboptions:
+                      keychain:
+                        description: Specify keychain name
+                        type: str
+                  no_auth:
+                    description: Use no authentication
+                    type: bool
+              authentication_ospfv3:
+                description: Enable authentication for OSPFv3
+                type: dict
+                suboptions:
+                  disable:
+                    description: Do not authenticate OSPFv3 packets
+                    type: bool
+                    default: false
+                  ipsec:
+                    description: Specify IPSec AH authentication attributes
+                    type: dict
+                    suboptions:
+                      spi:
+                        description: Specify the Security Parameter Index value
+                        type: int
+                      algorithim_type:
+                        description: Specify the type of algorithim
+                        type: str
+                        choices: ["md5", "sha1"]
+                      key:
+                        description: Specify key
+                        type: str
+                      clear_key:
+                        description: Specify key in cleartext form
+                        type: str
+                      password_key:
+                        description: Specify key in encrypted form
+                        type: str
+              authentication_key:
+                description: Specify authentication password (key)
+                type: dict
+                suboptions:
+                  password:
+                    description: The OSPFv2 password (key)
+                    type: str
+                  clear:
+                    description: Specifies an UNENCRYPTED password (key) will follow
+                    type: str
+                  encrypted:
+                    description: Specifies an ENCRYPTED password (key) will follow
+                    type: str
+              bfd:
+                description: Configure BFD parameters
+                type: dict
+                suboptions:
+                  fast_detect:
+                    description: Configure fast detection
+                    type: dict
+                    suboptions:
+                      set:
+                        description: Enable fast detection only
+                        type: bool
+                      strict_mode:
+                        description: Hold down neighbor session until BFD session is up
+                        type: bool
+                  minimum_interval:
+                    description: Hello interval in milli-seconds
+                    type: int
+                  multiplier:
+                    description: Detect multiplier
+                    type: int
+              cost:
+                description: Specify Interface cost
+                type: int
+              cost_fallback:
+                description: Specify Cost when cumulative bandwidth goes below the theshold
+                type: dict
+                suboptions:
+                  cost:
+                    description: Specify cost w.r.t cummulative bandwidth
+                    type: int
+                  threshold:
+                    description: Specify threshold bandwidth when cost-fallback is applied
+                    type: int
+              database_filter:
+                description: Filter OSPF LSAs during synchronization and flooding
+                type: dict
+                suboptions:
+                  all_outgoing_lsa:
+                    description: Filter all outgoing LSA
+                    type: bool
+              dead_interval:
+                description: Specify interval after which a neighbor is declared dead
+                type: int
+              demand_circuit:
+                description: Enable/Disable demand circuits
+                type: bool
+              fast_reroute:
+                description: Specify IP Fast Reroute
+                type: dict
+                suboptions:
+                  disabled:
+                    description: Disable IP fast reroute
+                    type: bool
+                  per_link:
+                    description: Specify per-prefix computation
+                    type: dict
+                    suboptions:
+                      information_type:
+                        description: Specify per-link LFA exclusion or FRR LFA candidate information
+                        type: str
+                        choices: ["exclude", "lfa_candidate"]
+                      use_candidate_only:
+                        description: Enable/Disable backup selection from candidate-list only
+                        type: bool
+                      interface:
+                        description: Specify Per-link LFA exclusion information
+                        type: dict
+                        suboptions:
+                          bvi:
+                            description: Specify Bridge-Group Virtual Interface
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          bundle_ether:
+                            description: Specify Aggregated Ethernet interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          pos_int:
+                            description: Specify Aggregated pos interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          fast_ethernet:
+                            description: Specify FastEthernet/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          fiftygige:
+                            description: Specify FiftyGigE/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          fortygige:
+                            description: Specify FortyGigE/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          fourhundredgige:
+                            description: Specify FourHundredGigE/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          gigabitethernet:
+                            description: Specify GigabitEthernet/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          hundredgige:
+                            description: Specify HundredGigE/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          mgmteth:
+                            description: Specify MgmtEth/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          multilink:
+                            description: Specify Multilink network interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          pw_ether:
+                            description: Specify PWHE Ethernet Interface
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          pw_iw:
+                            description: Specify PWHE VC11 IP Interworking Interface
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          srp:
+                            description: Specify SRP interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          serial:
+                            description: Specify Serial network interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          tengige:
+                            description: Specify TenGigabitEthernet/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          twentyfivegige:
+                            description: Specify TwentyFiveGigabitEthernet/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          twohundredgige:
+                            description: Specify TwoHundredGigE/IEEE 802.3 interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+                          nve:
+                            description: Specify Network Virtualization Endpoint Interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          tunnel_ip:
+                            description: Specify GRE/IPinIP Tunnel Interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          tunnel_ipsec:
+                            description: Specify IPSec Tunnel interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          tunnel_mte:
+                            description: Specify MPLS Traffic Engineering P2MP Tunnel interface(s)
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: int
+                          tunnel_mpls:
+                            description: MPLS Transport Protocol Tunnel interface
+                            type: list
+                            elements: dict
+                            suboptions:
+                              name: Specify the interface id
+                              type: str
+              flood_reduction:
+                description: Enable/Disable flood reduction
+                type: bool
+              hello_interval:
+                description: Specify Time between HELLO packets
+                type: int
+              link_down_fast_detect:
+                description: Configure interface down parameters
+                type: bool
+              message_digest_key:
+                description: Message digest authentication password (key)
+                type: dict
+                suboptions:
+                  id:
+                    description: Key ID
+                    type: int
+                    required: true
+                  md5:
+                    description: Use MD5 Algorithm
+                    type: dict
+                    required: true
+                    suboptions:
+                      password:
+                        description: The OSPFv2 password (key)
+                        type: str
+                      clear:
+                        description: Specifies an UNENCRYPTED password (key) will follow
+                        type: bool
+                      encrypted:
+                        description: Specifies an ENCRYPTED password (key) will follow
+                        type: bool  
+              mpls_ldp_sync:
+                description: Enable/Disable MPLS LDP Sync
+                type: bool
+              mtu_ignore:
+                description: Enable/Disable ignoring of MTU in DBD packets
+                type: bool
+              network:
+                description: Specify Network type
+                type: str
+                choices: ["broadcast", "non-broadcast", "point-to-multipoint", "point-to-point"]
+              neighbors:
+                description: Specify a neighbor routers
+                type: list
+                elements: dict
+                suboptions:
+                  neighbor_id:
+                    description: Specify Neighbor address (name)
+                    type: str
+                  cost:
+                    description: Specify OSPF cost for point-to-multipoint neighbor
+                    type: int
+                  db_filter_all_out:
+                    description: Specify Filter OSPF LSA during synchronization and flooding for point-to-multipoint neighbor
+                    type: bool
+                  poll_interval:
+                    description: Specify OSPF dead-router polling interval
+                    type: int
+                  priority:
+                    description: Specify OSPF priority of non-broadcast neighbor
+                    type: int
+              packet_size:
+                description: Customize size of OSPF packets upto MTU
+                type: int
+              passive:
+                description: Enable/Disable passive
+                type: bool
+              prefix_suppression:
+                description: Suppress advertisement of the prefixes
+                type: bool
+              priority:
+                description: Specify Router priority
+                type: int
+              retransmit_interval:
+                  description: Specify time between retransmitting lost link state advertisements
+                  type: int
+              security_ttl:
+                description: Enable security
+                type: dict
+                suboptions:
+                  set:
+                    description: Enable ttl security
+                    type: bool
+                  hops:
+                    description: Maximum number of IP hops allowed <1-254>
+                    type: int
+              segment_routing_mpls:
+                description: Enable segment routing microloop avoidance
+                type: bool
+              instance_id:
+                description: Specify instance ID
+                type: int
+  state:
+    description:
+      - The state the configuration should be left in.
+    type: str
+    choices:
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - gathered
+      - parsed
+      - rendered
+    default: merged

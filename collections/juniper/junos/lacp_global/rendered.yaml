@@ -1,0 +1,12 @@
+---
+- name: Render operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_lacp: &id001
+        config:
+          system_priority: 63
+          link_protection: revertive
+        state: rendered

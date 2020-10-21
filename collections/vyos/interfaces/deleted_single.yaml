@@ -1,0 +1,12 @@
+- hosts: vyos
+  gather_facts: false
+  connection: network_cli
+  tasks:
+   - name: Delete the provided interfaces
+     vyos.vyos.vyos_interfaces: &id001
+       config:
+         - name: eth1
+         - name: eth2
+         - name: eth3
+                   
+       state: deleted

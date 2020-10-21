@@ -1,0 +1,10 @@
+---
+- name: PREFIX SET REMOVE
+  hosts: iosxr-lab
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Set prefix-set
+      iosxr_config:
+        commands:
+          - no prefix-set test_set

@@ -1,0 +1,15 @@
+---
+- name: Deleted  operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Delete an area
+      junipernetworks.junos.junos_ospfv3:
+        config:
+#          - router_id: 10.200.16.75
+#            areas:
+#              - area_id: 0.0.0.100
+#                interfaces:
+#                  - name: so-0/0/0.0
+        state: deleted

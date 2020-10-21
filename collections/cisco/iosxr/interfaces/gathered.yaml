@@ -1,0 +1,10 @@
+---
+- name: convert configured interfaces to structured data
+  hosts: iosxr-lab
+  gather_facts: false
+  tasks:
+
+    - name: Use the INTERFACES resource module to gather the current config
+      cisco.iosxr.iosxr_interfaces:
+        state: gathered
+      register: interfaces

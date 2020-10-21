@@ -1,0 +1,10 @@
+- hosts: iosxr-rdo
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks:
+   - name: ospfv3
+     cisco.iosxr.iosxr_ospfv3: &id001
+       running_config: "{{ lookup('file', 'sample.cfg') }}"
+       state: parsed

@@ -1,0 +1,10 @@
+---
+- name: Parsed Playbook For l2_interfaces
+  hosts: iosxr-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Parsed the runing-config
+      iosxr_l2_interfaces:
+        running_config: "{{lookup('file', './parsed.cfg')}}"
+        state: parsed

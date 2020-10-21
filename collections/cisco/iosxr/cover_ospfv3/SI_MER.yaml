@@ -1,0 +1,44 @@
+- hosts: iosxr-lab
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks: 
+    - name: Merge provided configuration with device configuration
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 55
+              areas:
+                - area_id: 5
+                  bfd:
+                    fast_detect:
+                      strict_mode: true
+                    multiplier: 30
+                  authentication:
+                    ipsec:
+                      spi: 500
+                      algorithim_type: 'md5'
+                      key: '1234567890abcdef1234567890abcdef'
+
+#              authentication:
+#                ipsec:
+#                   spi: 500
+#                   algorithim_type: 'md5'
+#                   key: '1234567890abcdef1234567890abcdef'
+              bfd:
+                minimum_interval: 200
+            - process_id: 56
+              authentication:
+                disable: true
+              auto_cost:
+                reference_bandwidth: 64
+
+              bfd:
+                fast_detect:
+                  strict_mode: true
+                multiplier: 30
+
+        state: merged
+      register: ospf_routes
+

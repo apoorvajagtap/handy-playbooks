@@ -1,0 +1,19 @@
+---
+- name: This Play executes multiple iosxr commands
+  hosts: iosxr-local
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Run show version, show interfaces and no feature npv
+      iosxr_command:
+        commands:
+           - {command: copy running-config harddisk:ansible_tmp.txt, prompt: 'Destination file name \(control-c to abort\)\: \[\/ansible_tmp.txt\]\?', answer: 'ansible_tmp.txt'}
+#          - command: copy running-config harddisk:ansible_tmp.txt
+#            prompt: 'Destination file name \(control-c to abort\)\: \[\/ansible_tmp.txt\]\?'
+#            answer: ansible_tmp.txt
+
+#      iosxr_command:
+#        commands:
+#          - show version
+#          - show interfaces
+#          - {command: no feature npv, prompt: Do you want to continue, answer: 'no'}

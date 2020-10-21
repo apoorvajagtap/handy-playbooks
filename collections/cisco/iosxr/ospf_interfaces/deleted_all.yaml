@@ -1,0 +1,10 @@
+- hosts: iosxr-lab
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks: 
+    - name: purge running configuration
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+        state: deleted

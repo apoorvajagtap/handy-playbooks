@@ -1,0 +1,8 @@
+- hosts: vyos
+  gather_facts: false
+  connection: network_cli
+  tasks:
+   - name: Parse the config to provide the structured argspec
+     vyos.vyos.vyos_interfaces: &id001
+       running_config: "{{ lookup('file', 'vyos_interfaces.cfg') }}"
+       state: parsed

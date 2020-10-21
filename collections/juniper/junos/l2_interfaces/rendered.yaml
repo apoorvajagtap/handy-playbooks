@@ -1,0 +1,19 @@
+---
+- name: Render operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_l2_interfaces: &id001
+        config:
+          - name: ge-0/0/1
+            access:
+              vlan: vlan100
+          - name: ge-0/0/2
+            trunk:
+              allowed_vlans:
+                - vlan200
+                - vlan300
+              native_vlan: '400'
+        state: rendered

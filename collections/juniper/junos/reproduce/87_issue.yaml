@@ -1,0 +1,59 @@
+---
+- name: Juniper SRX configuration compliance checks
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  gather_facts: false
+  tasks:
+    - set_fact:
+        config_directory: '{{ "config" }}'
+
+    - name: Admin credentials check
+      junipernetworks.junos.junos_config:
+        src: '{{ config_directory }}/admin_user.txt'
+        comment: Ensure that Admin user have been created
+      register: junos_output1
+      diff: true
+    - debug:
+        var: junos_output1
+    - debug:
+        msg: Admin credentials check - This check has passed with the following output({{ junos_output1 }})
+      when: not junos_output1.changed
+    - name:
+      debug:
+        msg: Admin credentials check - This check has failed with the following output({{ junos_output1 }})
+      when: junos_output1.changed
+
+    - name:  NTP Server check ++++++++++++++++++++++++++++++++++++++++++++++++++
+      junipernetworks.junos.junos_config:
+        src: '{{ config_directory }}/NTP_server.txt'
+        comment: Ensure that correct NTP servers has been configured
+      diff: true
+      register: junos_output2
+    - name: Print Junos OUTPUT ^^^vvvvv^^^^^^^^^vvvvvvvvvv^^^^^^^^^^^^^^vvvvvvvvvvvvvvvvvv
+      debug:
+        var: junos_output2.diff['prepared']
+
+    - name: Print output with condition =============================
+      debug:
+        msg: NTP Server check  - This check has passed with the following output({{ junos_output2 }})
+        #var: junos_output2
+      when: not junos_output2.changed
+    - debug:
+        msg: NTP Server check  - This check has failed with the following output({{ junos_output2 }})
+      when: junos_output2.changed
+
+    - name: Idle timeout check _________________________________________________
+      junipernetworks.junos.junos_config:
+        src: '{{ config_directory }}/idle_timeout.txt'
+        comment: Ensure that idle timeout has been configured
+      diff: true
+      register: junos_output3
+    - debug:
+        var: junos_output3
+    - debug:
+        msg: Idle timeout check   - This check has passed with the following output({{ junos_output3 }})
+      when: not junos_output3.changed
+    - debug:
+        msg: Idle timeout check   - This check has failed with the following output({{ junos_output3 }})
+      when: junos_output3.changed

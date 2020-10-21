@@ -1,0 +1,21 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-lab
+  gather_facts: no
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Merge the provided interfaces config to running-config
+      iosxr_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            description: 'interface is configures with Ansi'
+          - name: GigabitEthernet0/0/0/1
+            description: 'interface is configures with Ansi'
+          - name: GigabitEthernet0/0/0/2
+            description: '# interface is configures with Ansi'
+          - name: GigabitEthernet0/0/0/3
+            description: '# interface is configures with Ansible'
+          - name: GigabitEthernet0/0/0/4
+            description: This interface is configures with Ansible
+        state: merged

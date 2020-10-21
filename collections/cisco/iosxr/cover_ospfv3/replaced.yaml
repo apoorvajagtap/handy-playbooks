@@ -1,0 +1,21 @@
+- hosts: iosxr-lab
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks: 
+    - name: Replace provided configuration with device configuration
+      cisco.iosxr.iosxr_ospfv3: &id001
+        config:
+          processes:
+            - process_id: 27
+              areas:
+                - area_id: 10
+                  hello_interval: 2
+                - area_id: 20
+                  cost: 2
+                  default_cost: 2
+            - process_id: 26
+              authentication:
+                disable: true
+        state: replaced

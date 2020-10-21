@@ -1,0 +1,33 @@
+- hosts: vyos
+  gather_facts: false
+  connection: network_cli
+  tasks:
+    - name: Merge the provided configuration with the existing running configuration for VyOS device
+      register: result
+      vyos.vyos.vyos_interfaces: &id001
+        config:
+          - name: eth1
+            enabled: true
+            speed: auto
+            duplex: auto
+            description: Configured by Ansible
+            mtu: 1500
+            vifs:
+              - vlan_id: 200
+                enabled: true
+                description: VIF - 200
+          - name: eth2
+            enabled: true
+            speed: auto
+            duplex: auto
+            description: Configured by Ansible
+            mtu: 1500
+            vifs:
+              - vlan_id: 200
+                enabled: true
+                description: VIF - 200
+          - name: eth0
+            enabled: true
+            duplex: auto
+            speed: auto
+        state: merged

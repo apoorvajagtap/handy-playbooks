@@ -1,0 +1,10 @@
+---
+- name: Parsed Playbook For Junos interfaces
+  hosts: junos-lab
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Parsed the runing-config
+      junipernetworks.junos.junos_lacp_interfaces:
+        running_config: "{{lookup('file', './netconf_data/parsed.cfg')}}"
+        state: parsed

@@ -1,0 +1,9 @@
+---
+- name: Gathered Playbook
+  hosts: iosxr-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: gather iosxr-facts
+      iosxr_l2_interfaces:
+        state: gathered

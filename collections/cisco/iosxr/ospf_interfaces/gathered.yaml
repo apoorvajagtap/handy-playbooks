@@ -1,0 +1,10 @@
+- hosts: iosxr-lab
+
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+  tasks: 
+    - name: Gather provided configuration with device configuration
+      cisco.iosxr.iosxr_ospfv3: &id001
+        state: gathered

@@ -1,0 +1,9 @@
+---
+- name: Merged Operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: "gather facts for junos layer 3 interfaces"
+      junipernetworks.junos.junos_l3_interfaces:
+        state: gathered

@@ -1,0 +1,15 @@
+---
+- name: PREFIX SET
+  hosts: iosxr-lab
+  collections:
+    - cisco.iosxr
+  tasks:
+  - name: Set prefix-set
+    iosxr_config:
+      lines:
+        - '#testremark'
+        - 192.168.1.0/20 le 24
+        - end-set
+      parents: prefix-set test_set
+
+

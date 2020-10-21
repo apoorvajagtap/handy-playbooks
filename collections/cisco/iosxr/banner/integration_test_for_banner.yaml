@@ -1,0 +1,12 @@
+---
+- name: basic_no_login Playbook
+  hosts: iosxr-local
+  collections:
+    - cisco.iosxr
+  tasks:
+  - name: Setup
+    cisco.iosxr.iosxr_banner:
+      banner: login
+      text: "Junk login banner\nover multiple lines\n"
+      provider: '{{ netconf }}'
+      state: present

@@ -1,0 +1,23 @@
+---
+- name: Yang representation
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+  vars:
+    spec_yang_file: "./fixtures/{{inventory_hostname}}/models/yang_files/ietf-interfaces.yang"
+    spec_search_path: "./fixtures/{{inventory_hostname}}/models/yang_files"
+  tasks:
+    - name: generate spec from openconfig interface config data and represent in xml, json and yang tree
+      community.yang.generate_spec:
+        file: "{{ spec_yang_file }}"
+        search_path: "{{ spec_search_path }}"
+        doctype: config
+        json_schema:
+          path: "./output/{{ inventory_hostname }}/openconfig-interfaces-config.json"
+          defaults: True
+        xml_schema:
+          path: "./output/{{ inventory_hostname }}/openconfig-interfaces-config.xml"
+          defaults: True
+          annotations: True
+        tree_schema:
+          path: "./output/{{ inventory_hostname }}/openconfig-interfaces-config.tree"

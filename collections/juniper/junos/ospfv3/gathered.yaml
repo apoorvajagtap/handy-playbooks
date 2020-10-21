@@ -1,0 +1,9 @@
+---
+- name: Merged Operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: "gather facts for junos interfaces"
+      junipernetworks.junos.junos_ospfv3:
+        state: gathered

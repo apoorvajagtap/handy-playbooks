@@ -1,0 +1,15 @@
+---
+- name: Render operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_lldp_interfaces: &id001
+        config:
+
+          - name: ge-0/0/1
+
+          - name: ge-0/0/2
+            enabled: false
+        state: rendered

@@ -1,0 +1,21 @@
+---
+- name: Render operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_l3_interfaces: &id001
+        config:
+          - name: ge-1/0/0
+            ipv4:
+              - address: 192.168.100.1/24
+              - address: 10.200.16.20/24
+            unit: 0
+
+          - name: ge-2/0/0
+            ipv4:
+              - address: 192.168.100.2/24
+              - address: 10.200.16.21/24
+            unit: 0
+        state: rendered

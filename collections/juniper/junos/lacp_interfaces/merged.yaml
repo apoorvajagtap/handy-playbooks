@@ -1,0 +1,41 @@
+---
+- name: Merged operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Setup - remove interface config
+      junipernetworks.junos.junos_config:
+        lines:
+          - delete interfaces ae1
+          - delete interfaces ae2
+          - delete interfaces ge-0/0/1
+          - delete interfaces ge-0/0/2
+          - delete interfaces ge-0/0/3
+          - delete interfaces ge-0/0/4
+          - delete interfaces lo0
+    - name: Configure base lag interface
+      junipernetworks.junos.junos_config:
+        lines:
+          - set interfaces ae1 description "Configured by Ansible"
+          - set interfaces ae2 description "Configured by Ansible"
+          - set interfaces ge-0/0/1 ether-options 802.3ad ae1
+          - set interfaces ge-0/0/2 ether-options 802.3ad ae1
+          - set interfaces ge-0/0/3 ether-options 802.3ad ae2
+          - set interfaces ge-0/0/4 ether-options 802.3ad ae2
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      junipernetworks.junos.junos_lacp_interfaces: &id001
+        config:
+          - name: ae1
+            period: fast
+            sync_reset: enable
+            system:
+              priority: 100
+              mac:
+                address: 00:00:00:00:00:02
+
+          - name: ge-0/0/1
+            port_priority: 100
+            force_up: true
+        state: merged

@@ -1,0 +1,26 @@
+---
+- name: Render operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Replace configuration
+      junos_ospfv3:
+        config:
+          - router_id: 10.200.16.75
+            areas:
+              - area_id: 0.0.0.100
+                stub:
+                  default_metric: 200
+                  set: true
+                interfaces:
+                  - name: so-0/0/0.0
+                    priority: 3
+                    metric: 5
+                    flood_reduction: true
+                    passive: true
+              - area_id: 0.0.0.200
+                interfaces:
+                  - name: ge-1/1/0.0
+                  - name: ge-2/2/0.0
+        state: rendered

@@ -1,0 +1,63 @@
+- hosts: iosxr-lab
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - cisco.iosxr
+    - community.yang
+    - ansible.netcommon
+  tasks:
+    - name: Gather fact to get the software version number
+      cisco.iosxr.iosxr_facts:
+        gather_subset:
+        - default
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+    - name: Build a yang path based on the OS and version
+      set_fact:
+        yang_path: "{{ root_dir }}/{{ sub_dir }}/{{ vendor }}/{{ os }}/{{ version }}/"
+      vars:
+        root_dir: "{{ playbook_dir }}"
+        sub_dir: "yang_models"
+        vendor: "{{ ansible_network_os.split('.')[0] }}"
+        os: "{{ ansible_network_os.split('.')[1] }}"
+        version: "{{ ansible_net_version }}"
+
+    - name: Fetch list of supported yang model names
+      vars:
+        ansible_connection: ansible.netcommon.netconf
+      community.yang.fetch:
+      register: available
+
+#    - name: Fetch all the yang models supported by remote host and store it in dir location
+#      community.yang.fetch:
+#        name: all
+#        dir: "{{ yang_path }}"
+#      ignore_errors: True
+
+    - name: Define the filter
+      set_fact:
+        filter:
+          interfaces:
+            "@xmlns": "http://openconfig.net/yang/interfaces"
+    - name: Get the config
+      community.yang.get:
+        file: "{{ yang_path }}/*int*.yang"
+        filter: "{{ filter|to_xml }}"
+        source: running
+      register: interface_config
+
+    - name: Get the path of Ethernet1
+      set_fact:
+        path: "interface_config['json_data']['openconfig-interfaces:interfaces']['interface'][{{ index }}]"
+      loop: "{{ interface_config['json_data']['openconfig-interfaces:interfaces']['interface'] }}"
+      loop_control:
+        index_var: index
+        label: "{{ item.name }}"
+      when: item.name == 'Ethernet1'
+
+    - name: Update the description
+      ansible.netcommon.update_fact:
+        updates:
+        - path: "{{ path }}.config.description"
+          value: "Configured by ansible {{ 100|random }}"
+      register: updated

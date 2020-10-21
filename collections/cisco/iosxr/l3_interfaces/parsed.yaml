@@ -1,0 +1,10 @@
+---
+- name: Merged Operation
+  hosts: iosxr-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: "parse running config for iosxr layer 3 interfaces"
+      cisco.iosxr.iosxr_l3_interfaces:
+        running_config: "{{ lookup('file', './parsed.cfg') }}"
+        state: parsed

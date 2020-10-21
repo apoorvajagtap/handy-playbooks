@@ -1,0 +1,14 @@
+- hosts: vyos
+  gather_facts: false
+  collections:
+    - vyos.vyos
+  tasks:
+    - name: Merge the provided configuration with the existing running configuration for VyOS device
+      vyos_interfaces: &id001
+        config:
+          - name: eth1
+            description: Configured by Ansible - Interface 1
+            mtu: 1500
+            speed: auto
+            duplex: auto
+        state: merged

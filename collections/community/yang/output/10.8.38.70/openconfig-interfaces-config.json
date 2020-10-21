@@ -1,0 +1,13 @@
+{
+    "ietf-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "",
+                "description": "",
+                "type": "",
+                "enabled": "True",
+                "link-up-down-trap-enable": ""
+            }
+        ]
+    }
+}

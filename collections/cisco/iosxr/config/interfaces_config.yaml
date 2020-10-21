@@ -1,0 +1,13 @@
+---
+- name: PREFIX SET
+  hosts: iosxr-lab
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Set interface description config
+      iosxr_config:
+        lines:
+          - description interface is configures with Ansible
+        parents: interface GigabitEthernet0/0/0/0
+
+

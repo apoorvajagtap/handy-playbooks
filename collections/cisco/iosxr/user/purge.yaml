@@ -1,0 +1,9 @@
+---
+- name: Purge users except admin
+  hosts: iosxr-local
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: remove all users except admin
+      cisco.iosxr.iosxr_user:
+        purge: true

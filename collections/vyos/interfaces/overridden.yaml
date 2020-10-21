@@ -1,0 +1,28 @@
+- hosts: vyos
+  gather_facts: false
+  connection: network_cli
+  collections:
+    - vyos.vyos
+  tasks:
+   - name: override the interfaces config
+     vyos_interfaces: &id001
+       config:
+
+          - name: eth0
+            description: Configured by Ansible - Interface eth1
+            mtu: 1500
+            speed: auto
+            duplex: auto
+            vifs:
+
+              - vlan_id: 100
+                description: Eth1 - VIF 100
+                mtu: 400
+
+              - vlan_id: 101
+                description: Eth1 - VIF 101
+              
+              - vlan_id: 103
+                description: Eth1 - VIF 101
+
+       state: overridden

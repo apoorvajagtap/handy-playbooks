@@ -1,0 +1,37 @@
+---
+- name: Merged operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Set initial configuration for ospf
+      junos_ospfv2:
+        config:
+          - router_id: 10.200.16.75
+            areas:
+              - area_id: 0.0.0.100
+                interfaces:
+                  - name: so-0/0/0.0
+              - area_id: 0.0.0.200
+                interfaces:
+                  - name: ge-2/2/0.0
+#    - name: Reset configuration for ospf and routing-options
+#      junos_config:
+#        lines:
+#          - delete protocols ospf
+
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      junipernetworks.junos.junos_ospfv2: &id001
+        config:
+          - router_id: 10.200.16.75
+            areas:
+              - area_id: 0.0.0.100
+                stub:
+                  default_metric: 200
+                  set: true
+                interfaces:
+                  - name: so-0/0/0.0
+                    priority: 3
+                    metric: 5
+        state: merged

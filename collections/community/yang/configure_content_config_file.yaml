@@ -1,0 +1,70 @@
+---
+- name: Configure IOS-XR interfaces with JSON Config File input
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+  vars:
+    yang_file: "./files/cisco/iosxr/*.yang"
+    search_path: "./files/cisco/iosxr"
+    config_file: "./config_store/iosxr/613/openconfig-interfaces.json"
+  tasks:
+    - name: Configure interface description
+      community.yang.configure:
+        config:
+          {
+              "Cisco-IOS-XR-ifmgr-cfg:interface-configurations": {
+                  "interface-configuration": [
+                      {
+                          "active": "act",
+                          "description": "test for ansible 400",
+                          "interface-name": "Loopback888",
+                          "interface-virtual": [
+                              null
+                          ],
+                          "shutdown": [
+                              null
+                          ]
+                      },
+                      {
+                          "Cisco-IOS-XR-ipv4-io-cfg:ipv4-network": {
+                              "addresses": {
+                                  "primary": {
+                                      "address": "10.8.38.70",
+                                      "netmask": "255.255.255.0"
+                                  }
+                              }
+                          },
+                          "active": "act",
+                          "interface-name": "MgmtEth0/0/CPU0/0"
+                      },
+                      {
+                          "active": "act",
+                          "description": "configured using Ansible YANG collection",
+                          "interface-name": "GigabitEthernet0/0/0/0"
+                      },
+                      {
+                          "active": "act",
+                          "description": "# interface is configures with Ansible",
+                          "interface-name": "GigabitEthernet0/0/0/1"
+                      },
+                      {
+                          "active": "act",
+                          "description": "test openconfig",
+                          "interface-name": "GigabitEthernet0/0/0/2"
+                      },
+                      {
+                          "active": "act",
+                          "description": "# interface is configures with Ansible",
+                          "interface-name": "GigabitEthernet0/0/0/3"
+                      },
+                      {
+                          "active": "act",
+                          "description": "This interface is configures with Ansible",
+                          "interface-name": "GigabitEthernet0/0/0/4"
+                      }
+                  ]
+              }
+          }
+        file: "{{ yang_file }}"
+        search_path: "{{ search_path }}"
+      register: result

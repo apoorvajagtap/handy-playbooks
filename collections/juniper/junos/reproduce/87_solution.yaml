@@ -1,0 +1,23 @@
+---
+- name: Juniper SRX configuration compliance checks
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  gather_facts: false
+  tasks:
+    - set_fact:
+        config_directory: '{{ "config" }}'
+
+    - name: Syslog server check
+      junos_config:
+        src: ./config/syslog_config.txt
+      diff: true
+      register: junos_output
+    - debug: var=register
+
+    - debug:
+        msg: Syslog server check - This check has failed with the following output({{ junos_output.diff.prepared }})
+      when: junos_output.changed
+    - debug:
+        msg: Syslog server check - This check has passed with the following output({{ junos_output.diff.prepared }})
+      when: not junos_output.changed

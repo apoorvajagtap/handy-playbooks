@@ -1,0 +1,31 @@
+---
+- name: Fetch Yang Schema Playbook
+  gather_facts: no
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+  vars:
+    get_yang_file: "./files/cisco/iosxr/*.yang"
+    get_search_path: "./files/cisco/iosxr"
+    get_json_filter: "./filter/openconfig-interfaces.json"
+
+  tasks:
+    - name: fetch interface configuration and return it in JSON format
+      community.yang.get:
+        filter:
+          {
+              "Cisco-IOS-XR-ifmgr-cfg:interface-configurations": {
+                  "interface-configuration": [
+                      
+                  ]
+              }
+          }
+        file: "{{ get_yang_file }}"
+        search_path: "{{ get_search_path }}"
+      register: result
+
+    - name: copy contents to local file
+      copy:
+        content: "{{ result['json_data'] | to_nice_json }}"
+        dest: "./config_store/iosxr/613/openconfig-interfaces.json"
+

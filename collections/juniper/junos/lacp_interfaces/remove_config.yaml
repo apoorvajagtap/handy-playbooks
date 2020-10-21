@@ -1,0 +1,16 @@
+---
+- name: Merged operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Setup - remove interface config
+      junipernetworks.junos.junos_config:
+        lines:
+          - delete interfaces ae1
+          - delete interfaces ae2
+          - delete interfaces ge-0/0/1
+          - delete interfaces ge-0/0/2
+          - delete interfaces ge-0/0/3
+          - delete interfaces ge-0/0/4
+          - delete interfaces lo0

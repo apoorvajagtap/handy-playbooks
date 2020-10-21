@@ -1,0 +1,14 @@
+---
+- name: ENABLE NETCONF
+  gather_facts: no
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+    - cisco.iosxr
+
+  tasks:
+    - name: Enable Netconf service port(830)
+      cisco.iosxr.iosxr_netconf:
+        netconf_port: 830
+        netconf_vrf: default
+        state: present

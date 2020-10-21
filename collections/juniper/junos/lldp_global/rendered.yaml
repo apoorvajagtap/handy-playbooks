@@ -1,0 +1,14 @@
+---
+- name: Render operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_lldp_global: &id001
+        config:
+          interval: 10000
+          address: 10.1.1.1
+          transmit_delay: 400
+          hold_multiplier: 10
+        state: rendered

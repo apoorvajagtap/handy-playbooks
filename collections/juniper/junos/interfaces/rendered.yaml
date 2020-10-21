@@ -1,0 +1,18 @@
+---
+- name: Render operation
+  hosts: junos-rdo
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Render xml tree for provided config
+      junipernetworks.junos.junos_interfaces: &id001
+        config:
+          - name: ge-0/0/2
+            description: Configured by Ansibull
+            mtu: 2048
+            speed: 20m
+            hold_time:
+              up: 3200
+              down: 3200
+        state: rendered
+

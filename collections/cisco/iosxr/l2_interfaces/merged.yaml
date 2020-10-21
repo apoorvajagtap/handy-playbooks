@@ -1,0 +1,22 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-rdo
+  collections:
+  - cisco.iosxr
+  tasks:
+    - name: Merge provided configuration with device configuration
+      iosxr_l2_interfaces:
+        config:
+          - name: GigabitEthernet0/0/0/0
+            native_vlan: 20
+          - name: GigabitEthernet0/0/0/1
+            native_vlan: 40
+            l2transport: True
+            l2protocol:
+              - stp: tunnel
+          - name: GigabitEthernet0/0/0/2.900
+            l2transport: True
+            q_vlan:
+              - 20
+              - 40
+        state: merged

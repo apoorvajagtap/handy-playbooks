@@ -1,0 +1,19 @@
+---
+- name: IOS-XR Integration tests
+  hosts: iosxr-rdo
+  collections:
+    - cisco.iosxr
+  tasks:
+  - name: Use src with module alias
+    register: result
+    iosxr_config:
+      src: config.j2
+  - name: Print result
+    debug:
+      var: result
+  - assert:
+      that:
+        # make sure that the template content was read and not the path
+        - result.changed == true
+        - '"description test for ansible automation" in result.diff["prepared"]'
+

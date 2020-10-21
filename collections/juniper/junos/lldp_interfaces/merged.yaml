@@ -1,0 +1,35 @@
+---
+- name: Merged operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: get supported protocols
+      register: result
+      ignore_errors: true
+      junipernetworks.junos.junos_command:
+        commands: show lldp
+
+    - name: lldp supported
+      set_fact:
+        lldp_supported: true
+      when: not result.failed
+
+    - name: lldp not supported
+      set_fact:
+        lldp_supported: false
+      when: result.failed
+
+    - name: Setup - remove lldp interfaces config
+      junipernetworks.junos.junos_config:
+        lines:
+          - delete protocols lldp
+
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      junipernetworks.junos.junos_lldp_interfaces: &id001
+        config:
+          - name: ge-0/0/1
+          - name: ge-0/0/2
+            enabled: false
+        state: merged

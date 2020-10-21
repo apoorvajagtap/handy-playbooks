@@ -1,0 +1,17 @@
+---
+- name: Merged operation
+  hosts: junos-lab
+  collections:
+    - junipernetworks.junos
+  tasks:
+    - name: Setup - remove lacp config
+      junipernetworks.junos.junos_config:
+        lines:
+          - delete chassis aggregated-devices ethernet lacp
+    - name: Merge the provided configuration with the exisiting running configuration
+      register: result
+      junipernetworks.junos.junos_lacp: &id001
+        config:
+          system_priority: 63
+          link_protection: revertive
+        state: merged

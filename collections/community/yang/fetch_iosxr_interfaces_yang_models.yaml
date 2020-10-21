@@ -1,0 +1,15 @@
+---
+- name: Fetch Yang Schema Playbook
+  gather_facts: no
+  hosts: iosxr-lab
+  collections:
+    - community.yang
+#    - cisco.iosxr
+  tasks:
+    - name: Fetch given yang model and it’s dependent models from remote host
+      community.yang.fetch:
+        name: openconfig-network-instance
+        # name: openconfig-interfaces
+        # name: ietf-yang-types
+#        name: openconfig-interfaces
+#        dir: "./fixtures/{{inventory_hostname}}/models/yang_files"

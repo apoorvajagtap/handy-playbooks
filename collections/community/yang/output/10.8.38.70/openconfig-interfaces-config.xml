@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    <interface>
+      <!-- # keys: name-->
+      <!-- # entries: 0.. -->
+      <name>
+        <!-- type: string -->
+      </name>
+      <description>
+        <!-- type: string -->
+      </description>
+      <type>
+        <!-- type: identityref -->
+      </type>
+      <enabled>true</enabled>
+      <link-up-down-trap-enable>
+        <!-- type: enumeration -->
+      </link-up-down-trap-enable>
+    </interface>
+  </interfaces>
+</config>

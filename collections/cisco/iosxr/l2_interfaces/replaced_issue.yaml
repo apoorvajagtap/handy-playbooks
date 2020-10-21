@@ -1,0 +1,26 @@
+---
+- name: Merged Playbook
+  hosts: iosxr-rdo
+  gather_facts: no
+  collections:
+    - cisco.iosxr
+  tasks:
+    - name: Replaces device L2 configuration of listed interfaces with provided configuration
+      register: result
+      cisco.iosxr.iosxr_l2_interfaces: &id001
+        config:
+          - name: GigabitEthernet0/0/0/1
+            native_vlan: 10
+            l2transport: true
+            l2protocol:
+              - cdp: forward
+              - pvst: tunnel
+            propagate: true
+          - name: GigabitEthernet0/0/0/3.900
+            native_vlan: 10
+            q_vlan:
+              - 20
+              - 40
+          - name: GigabitEthernet0/0/0/4
+            native_vlan: 40
+        state: replaced
